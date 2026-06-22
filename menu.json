@@ -1,0 +1,51 @@
+{
+  "config": {
+    "moneda": "$",
+    "whatsapp": "19561234567",
+    "instagram": "https://www.instagram.com/sweetwaydesserts1",
+    "igHandle": "@sweetwaydesserts1",
+    "cashapp": "",
+    "zelle": "",
+    "logo": ""
+  },
+
+  "signature": [
+    { "nombre": "Fresas con Crema",     "desc": "strawberries & whipped cream", "precio": 8 },
+    { "nombre": "Strawberry Shortcake", "desc": "sponge, strawberry & cream",   "precio": 9 },
+    { "nombre": "Biscoff Dream",        "desc": "Biscoff cookie & caramel",     "precio": 9 },
+    { "nombre": "Tres Leches Berry",    "desc": "tres leches & mixed berries",  "precio": 9 },
+    { "nombre": "Oreo & Cream",         "desc": "chocolate cookie & cream",     "precio": 8 },
+    { "nombre": "Mango Chamoy",         "desc": "mango, chamoy & chili",        "precio": 8 }
+  ],
+
+  "extras": [
+    { "nombre": "Extra strawberry",   "precio": 1.5 },
+    { "nombre": "Biscoff / Nutella",  "precio": 1.5 },
+    { "nombre": "Condensed / Cajeta", "precio": 1 },
+    { "nombre": "Large (16 oz)",      "precio": 3 }
+  ],
+
+  "personalizado": {
+    "precio": 8,
+    "minimo": 12,
+    "bases": ["Oreo", "Maria cookie", "Brownie", "Vanilla sponge", "Granola"],
+    "toppings": ["Nutella", "Strawberry", "Biscoff", "Tres leches", "Whipped cream", "Cajeta", "Mango", "Chamoy"]
+  },
+
+  "reglas": {
+    "es": [
+      "Pedidos personalizados desde 12 vasitos (1 combo por pedido).",
+      "Haz tu pedido con 3–5 días de anticipación.",
+      "Anticipo del 50% para apartar tu fecha.",
+      "Precio especial por volumen (24+ vasitos).",
+      "Entrega en punto acordado o envío — sin visitas a domicilio."
+    ],
+    "en": [
+      "Custom orders from 12 cups (1 combo per order).",
+      "Place your order 3–5 days in advance.",
+      "50% deposit to reserve your date.",
+      "Special bulk pricing (24+ cups).",
+      "Pickup at agreed spot or delivery — no home visits."
+    ]
+  }
+}

@@ -1,0 +1,473 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sweetway — Menu & Orders</title>
+
+<!-- ============================================================= -->
+<!--  NO necesitas tocar este archivo para cambiar el menú.        -->
+<!--  Edita los sabores, precios y datos en  menu.json             -->
+<!-- ============================================================= -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yellowtail&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --berry:#6E1E38; --berry-d:#4F1426; --straw:#D6435A; --rose:#F4DAE2; --rose-d:#EBBFCC;
+ --blush:#F7E5E9; --cream:#FBF5EE; --cream-2:#F6ECDD; --gold:#B98A4B; --gold-s:#CBA268;
+ --ink:#3A2730;
+ --script:'Yellowtail',cursive; --serif:'Cormorant Garamond',Georgia,serif;
+ --display:'Fraunces',Georgia,serif; --ui:'Archivo',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ font-family:var(--serif); color:var(--ink); -webkit-font-smoothing:antialiased;
+ background-color:var(--rose);
+ background-image:
+  url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'><g fill='none' stroke='%236E1E38' stroke-width='1.4' opacity='0.10'><path d='M34 28c-5-7-16-4-16 4 0 7 16 16 16 16s16-9 16-16c0-8-11-11-16-4z'/><path d='M118 104c-4-6-13-3-13 3 0 6 13 13 13 13s13-7 13-13c0-6-9-9-13-3z'/></g><g fill='none' stroke='%23B98A4B' stroke-width='1.4' opacity='0.16'><path d='M104 30l0 14M97 37l14 0'/><path d='M40 104l0 11M34.5 109.5l11 0'/></g><g fill='%23D6435A' opacity='0.10'><path d='M112 56c5 0 7 5 6 9-1 5-5 8-6 8s-5-3-6-8c-1-4 1-9 6-9z'/><path d='M30 78c5 0 7 5 6 9-1 5-5 8-6 8s-5-3-6-8c-1-4 1-9 6-9z'/></g><g fill='%23B98A4B' opacity='0.18'><circle cx='75' cy='20' r='1.6'/><circle cx='20' cy='55' r='1.6'/><circle cx='130' cy='80' r='1.6'/><circle cx='75' cy='130' r='1.6'/><circle cx='95' cy='95' r='1.6'/></g></svg>");
+ padding:34px 18px 120px; display:flex; justify-content:center;
+}
+.menu{width:100%; max-width:760px; background:var(--cream); position:relative;
+ padding:54px 56px 46px; border-radius:10px; box-shadow:0 30px 80px -40px rgba(78,20,38,.5);}
+.frame{position:absolute; inset:14px; border:1.5px solid var(--gold); border-radius:6px; pointer-events:none}
+.frame::after{content:""; position:absolute; inset:5px; border:1px solid rgba(110,30,56,.35); border-radius:3px}
+.corner{position:absolute; width:54px; height:54px; color:var(--gold); pointer-events:none}
+.corner.tl{top:8px;left:8px} .corner.tr{top:8px;right:8px;transform:scaleX(-1)}
+.corner.bl{bottom:8px;left:8px;transform:scaleY(-1)} .corner.br{bottom:8px;right:8px;transform:scale(-1)}
+.inner{position:relative; z-index:2; text-align:center}
+
+.lang{position:absolute; top:22px; right:22px; z-index:6; display:flex; border:1px solid var(--gold);
+ border-radius:999px; overflow:hidden; font-family:var(--ui); font-size:11px; font-weight:700; background:var(--cream)}
+.lang button{border:none; background:transparent; color:var(--gold); padding:6px 11px; cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--berry); color:#fff}
+
+.est{font-family:var(--ui); font-size:11px; letter-spacing:.42em; color:var(--gold); text-transform:uppercase; margin-bottom:6px}
+.logo-slot{margin:2px auto 0; display:flex; align-items:center; justify-content:center}
+.logo-slot svg{width:172px; height:auto; display:block}
+.logo-slot img{width:158px; height:158px; border-radius:50%; object-fit:cover; border:2px solid var(--gold); box-shadow:0 8px 22px -10px rgba(78,20,38,.55)}
+.brand{font-family:var(--script); color:var(--berry); font-size:clamp(56px,12vw,82px); line-height:.9; margin:-6px 0 2px; text-shadow:0 1px 0 rgba(185,138,75,.25)}
+.flourish{width:280px; max-width:80%; margin:4px auto 8px; color:var(--gold); display:block}
+.subt{font-family:var(--ui); font-weight:600; letter-spacing:.34em; font-size:13px; color:var(--berry); text-transform:uppercase}
+.love{font-family:var(--serif); font-style:italic; font-size:16px; color:var(--straw); margin-top:7px; letter-spacing:.02em}
+
+.flow{display:flex; flex-wrap:wrap; gap:7px 14px; justify-content:center; margin-top:22px}
+.flow .step{display:flex; align-items:center; gap:8px; font-family:var(--ui); font-size:12px; color:var(--berry)}
+.flow .n{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--gold);color:var(--gold);
+ display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:none}
+
+.section{margin-top:30px; text-align:left}
+.sec-head{display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom:14px}
+.sec-head .ic{width:22px; height:22px; color:var(--berry); flex:none}
+.sec-head h3{font-family:var(--display); font-weight:600; font-size:21px; color:var(--berry); letter-spacing:.01em; white-space:nowrap}
+.sec-head .ln{height:1px; background:linear-gradient(90deg,transparent,var(--gold)); flex:1; opacity:.6}
+.sec-head .ln.l{background:linear-gradient(90deg,var(--gold),transparent)}
+
+.item{display:flex; align-items:center; gap:8px; padding:7px 0}
+.item .nm{font-family:var(--serif); font-weight:600; font-size:19px; color:var(--ink); white-space:nowrap}
+.item .ds{font-family:var(--serif); font-style:italic; font-size:14px; color:#8a7079; white-space:nowrap; overflow:hidden}
+.item .dot{flex:1; border-bottom:1.5px dotted var(--rose-d); transform:translateY(-2px)}
+.item .pr{font-family:var(--ui); font-weight:600; font-size:16px; color:var(--berry); white-space:nowrap}
+.addbtn{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--straw);background:#fff;color:var(--straw);
+ font-family:var(--ui);font-weight:700;font-size:15px;line-height:1;cursor:pointer;transition:.15s}
+.addbtn:hover{background:var(--straw);color:#fff}
+.addbtn.on{background:var(--berry);border-color:var(--berry);color:#fff}
+.addbtn:focus-visible{outline:2px solid var(--berry);outline-offset:2px}
+
+.div{display:flex; align-items:center; justify-content:center; gap:14px; margin:26px 0 4px; color:var(--gold)}
+.div .l{height:1px; width:90px; background:linear-gradient(90deg,transparent,var(--gold))}
+.div .r{height:1px; width:90px; background:linear-gradient(90deg,var(--gold),transparent)}
+.div svg{width:18px;height:18px;color:var(--straw)}
+
+.builder{background:linear-gradient(180deg,#fff,#fffaf5); border:1px solid var(--gold-s); border-radius:12px; padding:18px 18px 20px; margin-top:6px}
+.blabel{font-family:var(--ui); font-size:10.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:700; margin:12px 0 8px}
+.blabel:first-child{margin-top:0}
+.opts{display:flex; flex-wrap:wrap; gap:7px}
+.opt{border:1.5px solid var(--gold-s); background:#fff; color:var(--ink); padding:7px 13px; border-radius:999px;
+ font-family:var(--ui); font-size:13px; font-weight:500; cursor:pointer; transition:.15s}
+.opt[aria-pressed="true"]{background:var(--straw); border-color:var(--straw); color:#fff}
+.opt:focus-visible{outline:2px solid var(--berry); outline-offset:2px}
+.bqty{display:flex; align-items:center; gap:14px; margin-top:16px}
+.bqty .stp{display:flex; align-items:center; gap:12px}
+.bqty .stp button{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--gold-s);background:#fff;color:var(--ink);
+ font-family:var(--ui);font-size:18px;cursor:pointer}
+.bqty .stp span{min-width:30px;text-align:center;font-family:var(--ui);font-weight:600;font-size:16px}
+.bqty .bprice{margin-left:auto;font-family:var(--display);font-weight:600;color:var(--berry);font-size:22px}
+.badd{width:100%;margin-top:16px;border:none;background:var(--berry);color:#fff;font-family:var(--ui);font-weight:600;
+ font-size:14px;padding:13px;border-radius:10px;cursor:pointer;letter-spacing:.03em;transition:.15s}
+.badd:hover{background:var(--berry-d)}
+.badd:disabled{opacity:.4;cursor:not-allowed}
+.bnote{font-family:var(--ui);font-size:12px;color:#8a7079;margin-top:9px;text-align:center}
+
+.events{border:1px dashed var(--gold); border-radius:12px; padding:16px 18px; margin-top:6px; background:#fff}
+.events ul{list-style:none}
+.events li{position:relative; padding:7px 0 7px 22px; font-family:var(--serif); font-size:15.5px; color:var(--ink); border-bottom:1px solid var(--rose-d)}
+.events li:last-child{border-bottom:none}
+.events li::before{content:"♥"; position:absolute; left:0; top:8px; color:var(--straw); font-size:12px}
+
+.foot{margin-top:30px; text-align:center}
+.foot .loc{font-family:var(--ui); font-weight:600; letter-spacing:.3em; font-size:12px; color:var(--berry); text-transform:uppercase; display:flex; align-items:center; justify-content:center; gap:10px}
+.foot .ig{font-family:var(--serif); font-style:italic; font-size:15px; color:var(--gold); margin-top:8px}
+.foot .ig a{color:var(--gold); text-decoration:none}
+.foot .hearts{color:var(--straw); font-size:12px; margin-top:6px; letter-spacing:.4em}
+
+.order-bar{position:fixed; left:0; right:0; bottom:0; z-index:40; background:var(--berry); color:var(--cream);
+ padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
+ transform:translateY(130%); transition:transform .25s ease; box-shadow:0 -8px 26px rgba(78,20,38,.35)}
+.order-bar.show{transform:translateY(0)}
+.order-bar .sum{font-family:var(--ui); font-size:13px}
+.order-bar .sum b{font-family:var(--display); font-size:19px; color:#fff; margin-left:4px}
+.order-bar button{border:none; background:var(--gold); color:#fff; font-family:var(--ui); font-weight:600;
+ padding:11px 18px; border-radius:999px; font-size:13.5px; cursor:pointer; letter-spacing:.03em}
+
+.sheet-bg{position:fixed; inset:0; background:rgba(60,20,35,.5); z-index:50; display:none}
+.sheet-bg.show{display:block}
+.sheet{position:fixed; left:0; right:0; bottom:0; z-index:60; background:var(--cream); border-radius:20px 20px 0 0;
+ max-width:760px; margin:0 auto; padding:24px 20px 26px; transform:translateY(100%); transition:transform .28s ease;
+ max-height:82vh; overflow:auto; border-top:2px solid var(--gold)}
+.sheet.show{transform:translateY(0)}
+.sheet .sh-eyebrow{font-family:var(--ui); font-size:10.5px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); font-weight:600}
+.sheet h2{font-family:var(--display); font-weight:600; margin:4px 0 14px; font-size:27px; color:var(--berry)}
+.line{display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:1px solid var(--rose-d)}
+.line .name{flex:1; font-family:var(--serif); font-weight:600; font-size:16px}
+.qty{display:flex; align-items:center; gap:11px}
+.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--gold-s);background:#fff;color:var(--ink);
+ font-size:17px;line-height:1;cursor:pointer;font-family:var(--ui)}
+.line .lt{width:62px; text-align:right; font-family:var(--display); font-weight:600; color:var(--berry); font-size:18px}
+.total{display:flex; justify-content:space-between; align-items:center; margin:18px 2px 16px}
+.total span{font-family:var(--ui); font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#8a7079}
+.total b{font-family:var(--display); font-size:28px; color:var(--berry)}
+.send{width:100%; border:none; background:#25D366; color:#fff; font-family:var(--ui); font-weight:700; font-size:16px;
+ padding:15px; border-radius:13px; cursor:pointer; letter-spacing:.02em}
+.clear{display:block; margin:14px auto 0; border:none; background:none; color:#8a7079; font-family:var(--ui);
+ font-size:13px; cursor:pointer; text-decoration:underline}
+.paynote{font-family:var(--ui); text-align:center; font-size:12px; color:#8a7079; margin-top:12px; line-height:1.7}
+.emptyc{font-family:var(--serif); font-style:italic; text-align:center; color:#8a7079; padding:24px 0}
+.close{position:absolute; top:18px; right:20px; border:none; background:none; font-size:26px; color:#8a7079; cursor:pointer; line-height:1}
+.loaderr{font-family:var(--ui); background:#fff; border:1px dashed var(--straw); border-radius:12px; padding:18px;
+ margin-top:22px; color:var(--berry); font-size:13px; line-height:1.7; text-align:left}
+.loaderr code{background:var(--rose); padding:1px 5px; border-radius:4px}
+
+@media print{body{background:var(--rose); padding:0} .menu{box-shadow:none; max-width:none}
+ .order-bar,.sheet,.sheet-bg,.addbtn,.builder,.badd,.lang{display:none!important}}
+@media(max-width:560px){.menu{padding:42px 26px 36px} .item .ds{display:none} .sec-head h3{font-size:18px}}
+</style></head>
+<body>
+<div class="menu">
+ <div class="frame"></div>
+ <div class="lang" role="group" aria-label="Language / Idioma">
+  <button data-lang="en" aria-pressed="true">EN</button>
+  <button data-lang="es" aria-pressed="false">ES</button>
+ </div>
+ <svg class="corner tl" viewBox="0 0 54 54" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 6 C 6 22 16 30 30 30 M6 6 C 22 6 30 16 30 30 M6 6 C 6 14 10 20 18 22 M18 22 a3 3 0 1 0 0.1 0"/><circle cx="30" cy="30" r="1.6" fill="currentColor"/></svg>
+ <svg class="corner tr" viewBox="0 0 54 54" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 6 C 6 22 16 30 30 30 M6 6 C 22 6 30 16 30 30 M6 6 C 6 14 10 20 18 22 M18 22 a3 3 0 1 0 0.1 0"/><circle cx="30" cy="30" r="1.6" fill="currentColor"/></svg>
+ <svg class="corner bl" viewBox="0 0 54 54" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 6 C 6 22 16 30 30 30 M6 6 C 22 6 30 16 30 30 M6 6 C 6 14 10 20 18 22 M18 22 a3 3 0 1 0 0.1 0"/><circle cx="30" cy="30" r="1.6" fill="currentColor"/></svg>
+ <svg class="corner br" viewBox="0 0 54 54" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 6 C 6 22 16 30 30 30 M6 6 C 22 6 30 16 30 30 M6 6 C 6 14 10 20 18 22 M18 22 a3 3 0 1 0 0.1 0"/><circle cx="30" cy="30" r="1.6" fill="currentColor"/></svg>
+
+ <div class="inner">
+  <div class="est">Est. 2024</div>
+
+  <div class="logo-slot" id="logoSlot">
+   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 280">
+    <g stroke="#6E1E38" fill="none" stroke-linejoin="round" stroke-linecap="round">
+     <defs><clipPath id="glass"><path d="M62 86 L76 214 Q77 220 84 220 L136 220 Q143 220 144 214 L158 86 Z"/></clipPath></defs>
+     <g clip-path="url(#glass)" stroke="none">
+       <rect x="50" y="86" width="120" height="22" fill="#FBF5EE"/><rect x="50" y="108" width="120" height="26" fill="#EE9BAE"/>
+       <rect x="50" y="134" width="120" height="20" fill="#FBF5EE"/><rect x="50" y="154" width="120" height="30" fill="#E36A82"/>
+       <rect x="50" y="184" width="120" height="40" fill="#D8B48A"/></g>
+     <g clip-path="url(#glass)" stroke="#C98AA0" stroke-width="0.8"><path d="M66 92 H154 M66 98 H154 M66 104 H154"/><path d="M70 140 H150 M70 146 H150 M70 152 H150"/></g>
+     <g clip-path="url(#glass)"><g fill="#D6435A" stroke="#6E1E38" stroke-width="1">
+       <path d="M70 122 a10 7 0 0 1 20 0 z"/><path d="M96 126 a9 6 0 0 1 18 0 z"/><path d="M120 122 a10 7 0 0 1 20 0 z"/>
+       <path d="M74 170 a11 7 0 0 1 22 0 z"/><path d="M104 174 a10 7 0 0 1 20 0 z"/><path d="M128 168 a9 6 0 0 1 18 0 z"/></g>
+       <g stroke="#FBE3D8" stroke-width="0.7"><path d="M80 122 v-5 M106 126 v-5 M130 122 v-5"/></g></g>
+     <g clip-path="url(#glass)" fill="#A9763F" stroke="none"><circle cx="78" cy="196" r="1.6"/><circle cx="92" cy="204" r="1.6"/><circle cx="108" cy="196" r="1.6"/><circle cx="124" cy="206" r="1.6"/><circle cx="138" cy="198" r="1.6"/><circle cx="100" cy="212" r="1.6"/><circle cx="118" cy="190" r="1.6"/></g>
+     <path d="M62 86 L76 214 Q77 220 84 220 L136 220 Q143 220 144 214 L158 86" stroke-width="2.6"/>
+     <ellipse cx="110" cy="86" rx="48" ry="9" stroke-width="2.6"/>
+     <path d="M66 84 C 66 60 80 54 90 60 C 92 44 110 42 116 54 C 124 40 144 46 142 64 C 156 58 162 74 152 84 Z" fill="#FBF5EE" stroke-width="2.4"/>
+     <g stroke="#D9A7B6" stroke-width="1"><path d="M80 78 q12 -10 26 -6 M96 84 q14 -12 30 -6 M74 70 q10 -8 20 -6"/></g>
+     <path d="M110 30 C 119 30 123 38 121 47 C 119 56 113 60 110 60 C 107 60 101 56 99 47 C 97 38 101 30 110 30 Z" fill="#D6435A" stroke-width="2"/>
+     <g fill="#F4D58B" stroke="none"><circle cx="106" cy="42" r="1.2"/><circle cx="114" cy="45" r="1.2"/><circle cx="110" cy="51" r="1.2"/><circle cx="104" cy="50" r="1.2"/><circle cx="116" cy="38" r="1.2"/></g>
+     <path d="M100 33 Q110 23 120 33 Q114 38 110 37 Q106 38 100 33 Z" fill="#7E9B6B" stroke-width="1.2"/><path d="M110 28 v6" stroke-width="1.6"/>
+     <g transform="rotate(-20 70 70)"><rect x="40" y="40" width="22" height="46" rx="4" fill="#E7C79A" stroke-width="2"/>
+       <g fill="#B07A3C" stroke="none"><circle cx="51" cy="52" r="1.3"/><circle cx="51" cy="60" r="1.3"/><circle cx="51" cy="68" r="1.3"/><circle cx="46" cy="56" r="1.1"/><circle cx="56" cy="56" r="1.1"/><circle cx="46" cy="64" r="1.1"/><circle cx="56" cy="64" r="1.1"/></g></g>
+     <g stroke="#B98A4B" stroke-width="1.4"><path d="M176 70 l0 12 M170 76 l12 0"/><path d="M44 120 l0 9 M39.5 124.5 l9 0"/><path d="M168 150 l0 8 M164 154 l8 0"/></g>
+     <g fill="#B98A4B" stroke="none"><circle cx="184" cy="100" r="1.6"/><circle cx="40" cy="150" r="1.6"/><circle cx="176" cy="180" r="1.6"/></g>
+    </g>
+   </svg>
+  </div>
+
+  <div class="brand">Sweetway</div>
+  <svg class="flourish" viewBox="0 0 280 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M10 10 H110 M170 10 H270"/><path d="M110 10 C120 2 130 18 140 10 C150 2 160 18 170 10"/><path d="M140 10 l-4 7 4 4 4 -4 z" fill="currentColor" stroke="none"/><circle cx="10" cy="10" r="1.6" fill="currentColor"/><circle cx="270" cy="10" r="1.6" fill="currentColor"/></svg>
+  <div class="subt">Luxury Dessert Cups</div>
+  <div class="love">made with love · sweetness in every layer</div>
+
+  <div class="flow" id="flow"></div>
+
+  <div class="section">
+   <div class="sec-head"><div class="ln l"></div>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 7c-2-3-7-2-7 2 0 4 7 9 7 9s7-5 7-9c0-4-5-5-7-2z"/></svg>
+    <h3>Signature Cups</h3>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 7c-2-3-7-2-7 2 0 4 7 9 7 9s7-5 7-9c0-4-5-5-7-2z"/></svg>
+   <div class="ln"></div></div>
+   <div class="cols" id="signature"></div>
+  </div>
+
+  <div class="div"><span class="l"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c-2-3-7-2-7 2 0 4 7 9 7 9s7-5 7-9c0-4-5-5-7-2z"/></svg><span class="r"></span></div>
+
+  <div class="section">
+   <div class="sec-head"><div class="ln l"></div>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 9h10l-1 10H8z"/><ellipse cx="12" cy="9" rx="5" ry="1.4"/><path d="M9 6c0-2 6-2 6 0"/></svg>
+    <h3>Extras &amp; Toppings</h3>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M7 9h10l-1 10H8z"/><ellipse cx="12" cy="9" rx="5" ry="1.4"/><path d="M9 6c0-2 6-2 6 0"/></svg>
+   <div class="ln"></div></div>
+   <div class="cols" id="extras"></div>
+  </div>
+
+  <div class="div"><span class="l"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c-2-3-7-2-7 2 0 4 7 9 7 9s7-5 7-9c0-4-5-5-7-2z"/></svg><span class="r"></span></div>
+
+  <div class="section">
+   <div class="sec-head"><div class="ln l"></div>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 9h14l-1 11H6z"/><path d="M5 9c0-3 14-3 14 0"/><path d="M12 3v3"/></svg>
+    <h3 data-t="t_build">Build your cup</h3>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 9h14l-1 11H6z"/><path d="M5 9c0-3 14-3 14 0"/><path d="M12 3v3"/></svg>
+   <div class="ln"></div></div>
+   <div class="builder">
+    <div class="blabel" data-t="t_base">Base (bottom)</div>
+    <div class="opts" id="optBases"></div>
+    <div class="blabel" data-t="t_top">Filling &amp; topping (top)</div>
+    <div class="opts" id="optTops"></div>
+    <div class="bqty">
+     <div class="stp"><button id="bMinus" aria-label="-">−</button><span id="bQty">12</span><button id="bPlus" aria-label="+">+</button></div>
+     <div class="bprice" id="bPrice"></div>
+    </div>
+    <button class="badd" id="bAdd" data-t="t_addcustom">Add to order</button>
+    <div class="bnote" id="bNote"></div>
+   </div>
+  </div>
+
+  <div class="div"><span class="l"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c-2-3-7-2-7 2 0 4 7 9 7 9s7-5 7-9c0-4-5-5-7-2z"/></svg><span class="r"></span></div>
+
+  <div class="section">
+   <div class="sec-head"><div class="ln l"></div>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16v13H4z"/><path d="M4 11h16M9 4v4M15 4v4"/></svg>
+    <h3 data-t="t_events">Events &amp; Bulk</h3>
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16v13H4z"/><path d="M4 11h16M9 4v4M15 4v4"/></svg>
+   <div class="ln"></div></div>
+   <div class="events"><ul id="eventRules"></ul></div>
+  </div>
+
+  <div class="foot">
+   <div class="div"><span class="l"></span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c-2-3-7-2-7 2 0 4 7 9 7 9s7-5 7-9c0-4-5-5-7-2z"/></svg><span class="r"></span></div>
+   <div class="loc">McAllen <svg style="width:14px;height:14px;color:var(--straw)" viewBox="0 0 24 24" fill="currentColor"><path d="M12 8c-2-3-7-2-7 2 0 4 7 9 7 9s7-5 7-9c0-4-5-5-7-2z"/></svg> Texas</div>
+   <div class="ig"><a id="igLink" href="#" target="_blank" rel="noopener"></a></div>
+   <div class="hearts">♥ ♥ ♥</div>
+  </div>
+ </div>
+</div>
+
+<div class="order-bar" id="orderBar">
+ <div class="sum"><span id="count">0</span> <span data-t="t_inorder">in your order</span><b id="barTotal"></b></div>
+ <button id="openSheet" data-t="t_view">View order →</button>
+</div>
+
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-label="Your order">
+ <button class="close" id="closeSheet" aria-label="Close">×</button>
+ <div class="sh-eyebrow">Sweetway · McAllen, TX</div>
+ <h2 data-t="t_yourorder">Your order</h2>
+ <div id="lines"></div>
+ <div class="total"><span data-t="t_total">Total</span><b id="grandTotal"></b></div>
+ <button class="send" id="sendWa" data-t="t_send">Send order on WhatsApp</button>
+ <button class="clear" id="clearOrder" data-t="t_clear">Clear order</button>
+ <div class="paynote" id="payNote"></div>
+</div>
+
+<script>
+  /* ===== Traducciones de la interfaz (esto NO se edita normalmente) ===== */
+  const T = {
+    en:{ flow:["Pick your cups","Send on WhatsApp","Confirm & pay","Pickup or delivery"],
+         buildTitle:"Build your cup", eventsTitle:"Events & Bulk",
+         lblBase:"Base (bottom)", lblTop:"Filling & topping (top)", addCustom:"Add to order",
+         inOrder:"in your order", view:"View order →", yourorder:"Your order", total:"Total",
+         send:"Send order on WhatsApp", clear:"Clear order",
+         empty:"Nothing added yet 🍓", custom:"Custom cup",
+         minNote:n=>`Minimum ${n} cups for custom.`, pickBase:"Pick a base to start.",
+         pay:"To pay:", cashTail:"or cash on delivery.",
+         confirmLine:"Send your order and we'll confirm availability and total.",
+         payAfter:"We'll send payment details (Zelle / Cash App / cash) once we confirm.",
+         hello:"Hi Sweetway! 🍓 I'd like to order:", close:"Can you confirm availability and payment? 💗" },
+    es:{ flow:["Elige tus vasitos","Envía por WhatsApp","Confirmas y pagas","Recoges o envío"],
+         buildTitle:"Arma tu vasito", eventsTitle:"Eventos & Mayoreo",
+         lblBase:"Base (abajo)", lblTop:"Relleno y topping (arriba)", addCustom:"Agregar al pedido",
+         inOrder:"en tu pedido", view:"Ver pedido →", yourorder:"Tu pedido", total:"Total",
+         send:"Enviar pedido por WhatsApp", clear:"Vaciar pedido",
+         empty:"Aún no agregas nada 🍓", custom:"Vasito personalizado",
+         minNote:n=>`Mínimo ${n} vasitos para personalizado.`, pickBase:"Elige una base para empezar.",
+         pay:"Para pagar:", cashTail:"o efectivo en la entrega.",
+         confirmLine:"Envía tu pedido y te confirmamos disponibilidad y total.",
+         payAfter:"Te enviamos los datos de pago (Zelle / Cash App / efectivo) al confirmar.",
+         hello:"¡Hola Sweetway! 🍓 Quiero pedir:", close:"¿Me confirmas disponibilidad y cómo pagar? 💗" }
+  };
+
+  /* ===== Datos del menú: se cargan desde menu.json ===== */
+  let CONFIG, SIGNATURE, EXTRAS, PERSONALIZADO, REGLAS;
+
+  let lang="en";
+  const $=s=>document.querySelector(s);
+  const money=n=>CONFIG.moneda+Number(n).toLocaleString(undefined,{maximumFractionDigits:2});
+  const tr=()=>T[lang];
+  const cart=new Map();
+  let bBase=null, bTops=new Set(), bQty=0;
+
+  /* ----- idioma ----- */
+  document.querySelectorAll(".lang button").forEach(b=>{
+    b.onclick=()=>{
+      lang=b.dataset.lang;
+      document.querySelectorAll(".lang button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+      document.documentElement.lang=lang;
+      if(CONFIG) applyText();
+    };
+  });
+
+  function applyText(){
+    const t=tr();
+    const flow=$("#flow"); flow.innerHTML="";
+    t.flow.forEach((s,i)=>{const d=document.createElement("div");d.className="step";
+      d.innerHTML=`<span class="n">${i+1}</span> ${s}`;flow.appendChild(d);});
+    document.querySelector('[data-t="t_build"]').textContent=t.buildTitle;
+    document.querySelector('[data-t="t_events"]').textContent=t.eventsTitle;
+    document.querySelector('[data-t="t_base"]').textContent=t.lblBase;
+    document.querySelector('[data-t="t_top"]').textContent=t.lblTop;
+    document.querySelector('[data-t="t_addcustom"]').textContent=t.addCustom;
+    document.querySelector('[data-t="t_inorder"]').textContent=t.inOrder;
+    $("#openSheet").textContent=t.view;
+    document.querySelector('[data-t="t_yourorder"]').textContent=t.yourorder;
+    document.querySelector('[data-t="t_total"]').textContent=t.total;
+    $("#sendWa").textContent=t.send;
+    $("#clearOrder").textContent=t.clear;
+    buildRules(); updBuilder(); refresh();
+  }
+
+  function itemRow(it, withDesc){
+    const row=document.createElement("div"); row.className="item";
+    row.innerHTML=`<span class="nm">${it.nombre}</span>
+      ${withDesc&&it.desc?`<span class="ds">${it.desc}</span>`:""}
+      <span class="dot"></span><span class="pr">${money(it.precio)}</span>
+      <button class="addbtn" data-name="${it.nombre}" aria-label="Add ${it.nombre}">+</button>`;
+    row.querySelector(".addbtn").onclick=()=>add(it.nombre,it.precio);
+    return row;
+  }
+  function buildLists(){
+    const sig=$("#signature"); sig.innerHTML=""; SIGNATURE.forEach(it=>sig.appendChild(itemRow(it,true)));
+    const ex=$("#extras"); ex.innerHTML=""; EXTRAS.forEach(it=>ex.appendChild(itemRow(it,false)));
+  }
+
+  function buildRules(){
+    const ul=$("#eventRules"); ul.innerHTML="";
+    (REGLAS[lang]||[]).forEach(r=>{const li=document.createElement("li");li.textContent=r;ul.appendChild(li);});
+  }
+
+  function buildBuilder(){
+    const ob=$("#optBases"), ot=$("#optTops"); ob.innerHTML="";ot.innerHTML="";
+    PERSONALIZADO.bases.forEach(b=>{
+      const el=document.createElement("button");el.className="opt";el.textContent=b;el.setAttribute("aria-pressed",bBase===b);
+      el.onclick=()=>{bBase=(bBase===b?null:b);[...ob.children].forEach(x=>x.setAttribute("aria-pressed",x.textContent===bBase));updBuilder();};
+      ob.appendChild(el);
+    });
+    PERSONALIZADO.toppings.forEach(t=>{
+      const el=document.createElement("button");el.className="opt";el.textContent=t;el.setAttribute("aria-pressed",bTops.has(t));
+      el.onclick=()=>{bTops.has(t)?bTops.delete(t):bTops.add(t);el.setAttribute("aria-pressed",bTops.has(t));};
+      ot.appendChild(el);
+    });
+    $("#bQty").textContent=bQty; updBuilder();
+  }
+  $("#bMinus").onclick=()=>{if(!PERSONALIZADO)return;bQty=Math.max(PERSONALIZADO.minimo,bQty-1);$("#bQty").textContent=bQty;updBuilder();};
+  $("#bPlus").onclick=()=>{bQty++;$("#bQty").textContent=bQty;updBuilder();};
+  function updBuilder(){
+    if(!PERSONALIZADO)return;
+    $("#bPrice").textContent=money(bQty*PERSONALIZADO.precio);
+    $("#bAdd").disabled=!bBase;
+    $("#bNote").textContent=bBase?tr().minNote(PERSONALIZADO.minimo):tr().pickBase;
+  }
+  $("#bAdd").onclick=()=>{
+    if(!bBase)return;
+    const tops=[...bTops];
+    const name=`${tr().custom}: ${bBase}${tops.length?" + "+tops.join(" + "):""}`;
+    add(name,PERSONALIZADO.precio,bQty);
+    bBase=null;bTops.clear();bQty=PERSONALIZADO.minimo;buildBuilder();
+  };
+
+  function add(name,price,qty=1){
+    const e=cart.get(name); if(e)e.qty+=qty; else cart.set(name,{qty,price});
+    refresh();
+  }
+  function setQty(name,d){const e=cart.get(name);if(!e)return;e.qty+=d;if(e.qty<=0)cart.delete(name);refresh();}
+  const total=()=>{let t=0;cart.forEach(e=>t+=e.qty*e.price);return t;};
+  const totalQty=()=>{let t=0;cart.forEach(e=>t+=e.qty);return t;};
+
+  function refresh(){
+    const t=tr(), n=totalQty();
+    $("#count").textContent=n; $("#barTotal").textContent=money(total());
+    $("#orderBar").classList.toggle("show",n>0);
+    document.querySelectorAll(".addbtn").forEach(b=>{
+      const q=cart.get(b.dataset.name)?.qty||0; b.textContent=q>0?q:"+"; b.classList.toggle("on",q>0);
+    });
+    const lines=$("#lines"); lines.innerHTML="";
+    if(!cart.size){lines.innerHTML=`<div class="emptyc">${t.empty}</div>`;}
+    cart.forEach((e,name)=>{
+      const row=document.createElement("div");row.className="line";
+      row.innerHTML=`<span class="name">${name}</span>
+        <span class="qty"><button aria-label="-">−</button><span>${e.qty}</span><button aria-label="+">+</button></span>
+        <span class="lt">${money(e.qty*e.price)}</span>`;
+      const [minus,plus]=row.querySelectorAll("button");
+      minus.onclick=()=>setQty(name,-1); plus.onclick=()=>setQty(name,1);
+      lines.appendChild(row);
+    });
+    $("#grandTotal").textContent=money(total());
+    const pays=[];
+    if(CONFIG.cashapp)pays.push(`Cash App: ${CONFIG.cashapp}`);
+    if(CONFIG.zelle)pays.push(`Zelle: ${CONFIG.zelle}`);
+    $("#payNote").innerHTML=pays.length?`${t.pay} ${pays.join(" · ")} ${t.cashTail}<br>${t.confirmLine}`:`${t.payAfter}<br>${t.confirmLine}`;
+  }
+
+  $("#openSheet").onclick=()=>{$("#sheet").classList.add("show");$("#sheetBg").classList.add("show");};
+  function closeSheet(){$("#sheet").classList.remove("show");$("#sheetBg").classList.remove("show");}
+  $("#closeSheet").onclick=closeSheet; $("#sheetBg").onclick=closeSheet;
+  $("#clearOrder").onclick=()=>{cart.clear();refresh();};
+
+  $("#sendWa").onclick=()=>{
+    if(!totalQty())return;
+    const t=tr();
+    let msg=t.hello+"%0A";
+    cart.forEach((e,name)=>msg+=`• ${e.qty} × ${name} — ${money(e.qty*e.price)}%0A`);
+    msg+=`%0A${t.total}: ${money(total())}%0A%0A${t.close}`;
+    window.open(`https://wa.me/${CONFIG.whatsapp}?text=${msg}`,"_blank");
+  };
+
+  /* ----- inicializa una vez cargados los datos ----- */
+  function init(){
+    if(CONFIG.logo){ $("#logoSlot").innerHTML=`<img src="${CONFIG.logo}" alt="Sweetway">`; }
+    const ig=$("#igLink"); ig.textContent=CONFIG.igHandle||""; ig.href=CONFIG.instagram||"#";
+    bQty=PERSONALIZADO.minimo;
+    buildLists(); buildBuilder(); applyText();
+  }
+
+  function showLoadError(err){
+    const box=document.querySelector(".inner");
+    const div=document.createElement("div");
+    div.className="loaderr";
+    div.innerHTML="<b>No se pudo cargar <code>menu.json</code>.</b><br>"+
+      "1) Revisa que <code>menu.json</code> esté junto a <code>index.html</code> y sin errores de formato (comas o comillas de más).<br>"+
+      "2) Si abriste el archivo con doble clic desde tu compu, míralo mejor desde tu URL de GitHub Pages — la carga de datos no funciona con <code>file://</code>.<br>"+
+      "<small>Detalle técnico: "+err.message+"</small>";
+    box.appendChild(div);
+  }
+
+  /* ----- carga de datos ----- */
+  fetch("menu.json", {cache:"no-store"})
+    .then(r=>{ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+    .then(data=>{
+      CONFIG=data.config; SIGNATURE=data.signature; EXTRAS=data.extras;
+      PERSONALIZADO=data.personalizado; REGLAS=data.reglas;
+      init();
+    })
+    .catch(showLoadError);
+</script>
+</body></html>
